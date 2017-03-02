@@ -27,4 +27,29 @@
  */
 + (NSArray *)fetchIvarList:(Class)class;
 
+/**
+ 获取类中属性
+
+ @param class 类
+ @return 类中属性的Array
+ */
++ (NSArray *)fetchPropertyList:(Class)class;
+
+
+/**
+ 获取类中的方法
+
+ @param class 类
+ @return 类中方法的Array
+ */
++ (NSArray *)fetchMethodList:(Class)class;
+
+/**
+ 给类添加方法
+
+ @param methodSel 方法名
+ @param class 类
+ @param methodImp 方法的实现
+ */
++ (void)addMethod:(SEL)methodSel class:(Class)class methodImp:(SEL)methodSelImp;
 @end

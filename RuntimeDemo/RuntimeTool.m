@@ -35,4 +35,47 @@
     return array;
 }
 
++ (NSArray *)fetchPropertyList:(Class)class {
+    
+    unsigned int count = 0;
+    
+    objc_property_t *propertyList = class_copyPropertyList(class, &count);
+    
+    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:count];
+    
+    for (unsigned int i=0; i<count; i++) {
+        const char *propertyName = property_getName(propertyList[i]);
+        [array addObject:[NSString stringWithUTF8String:propertyName]];
+    }
+    free(propertyList);
+    return array;
+}
+
++ (NSArray *)fetchMethodList:(Class)class {
+    
+    unsigned int count = 0;
+    
+    Method *methodList = class_copyMethodList(class, &count);
+    
+    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:count];
+    
+    for (unsigned int i=0; i<count; i++) {
+        
+        Method method = methodList[i];
+        SEL methodName = method_getName(method);
+        [array addObject:NSStringFromSelector(methodName)];
+    }
+    
+    free(methodList);
+    return array;
+}
+
++ (void)addMethod:(SEL)methodSel class:(Class)class methodImp:(SEL)methodSelImp {
+    
+    Method method = class_getInstanceMethod(class, methodSelImp);
+    IMP methodImp = method_getImplementation(method);
+    const char *type = method_getTypeEncoding(method);
+    class_addMethod(class, methodSel, methodImp, type);
+}
+
 @end
